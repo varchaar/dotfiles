@@ -1,0 +1,69 @@
+#!/bin/bash
+# SETTINGS
+
+. panel_colors
+
+#FONT1="-spectrum-berry-medium-r-normal-sans-11-80-75-75-m-50-iso10646-1"
+FONT1="-*-profont-medium-*-*--12-*-*-*-*-*-*-1"
+FONT2="-misc-stlarch-medium-r-normal--10-100-75-75-c-80-iso10646-1"
+#BG="#FFE7D8B6"
+BG="#FF2d2d2d"
+#FG="#FFD2C5BC"
+FG="#FF2d2d2d"
+# COLORSCHEME
+BLACK="#FF525252"
+#RED="#FF9D6A6F"
+RED="#FFd64937"
+GREEN="#FF93B569"
+YELLOW="#FFF3D1A7"
+BLUE="#FF96A8B7"
+MAGENTA="#FF9F9CA9"
+CYAN="#FF88AABB"
+WHITE="#FFD2D1D4"
+DARK="#FF2d2d2d"
+PANNA="#FFbea492"
+
+function panel {
+
+	menu() {
+	echo "%{B$RED}%{F$DARK} Valentin  %{B-}%{F-}"
+	}
+
+	bat() {
+	bat=$(acpi -b| awk '{print $4}' | tr -d ',')
+	echo "%{B$DARK}%{F$RED}  %{B-}%{F-}%{F$PANNA} ${bat}%"
+	}
+
+	temp() {
+	temp=$(sensors | grep "Physical id 0" | cut -d+ -f2 | cut -d. -f1)
+	echo "%{B$DARK}%{F$RED}  %{B-}%{F-}%{F$PANNA} ${temp}°C"
+	}
+	
+	clock() {
+	clock=$(date "+%b %d %Y %R")
+	echo "%{B$DARK}%{F$RED}  %{B-}%{F-}%{F$PANNA} ${clock}"
+	}
+
+	vol() {
+	vol=$(amixer get Master | sed -nr '$ s:.*\[(.+%)].*:\1:p')
+	echo "%{B$DARK}%{F$RED}  %{B-}%{F-}%{F$PANNA} ${vol}%"
+	}
+
+	mus() {
+	mus=$(mpc current)
+	echo "%{B$DARK}%{F$RED}  %{B-}%{F-}%{F$PANNA} ${mus}"
+	}
+
+	net() {
+	net=$(iwconfig wlp5s0 | grep 'ESSID:' | awk '{gsub("ESSID:", " "); print $4}')
+	echo "%{B$DARK}%{F$RED}  %{B-}%{F-}%{F$PANNA} ${net}"
+	}
+	
+	echo "$(menu) $(desk) $(vol) $(bat) %{r}$(net) $(temp) $(clock) "
+}
+ while true 
+ do
+	 echo "$(panel)"
+	sleep 0.5	
+ done | lemonbar -g 1366x15 -f "$FONT1","$FONT2" -B "$DARK" -F "$FG" -p &
+

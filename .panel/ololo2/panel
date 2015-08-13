@@ -1,0 +1,52 @@
+#!/bin/bash
+
+PANEL_FIFO=/tmp/panel-fifo
+PANEL_HEIGHT=26
+PANEL_FONT_FAMILY="-*-profont-medium-*-*--12-*-*-*-*-*-*-1"
+ICON_FONT="FontAwesome:size=11"
+
+
+if [ $(pgrep -cx panel) -gt 1 ] ; then
+        printf "%s\n" "The panel is already running." >&2
+        exit 1
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+mkfifo "$PANEL_FIFO"
+
+bspc control --subscribe > "$PANEL_FIFO" &
+
+#applauncher
+echo -e 'L\uf00a' > $PANEL_FIFO &
+
+#clock
+while true; do
+              echo -e 'C\uf07'1 $(date +'%I:%M %p')
+            sleep 5
+done > "$PANEL_FIFO" &
+
+#date
+while true; do
+              echo -e 'D\uf073' $(date +'%a, %d %b %Y')
+            sleep 5
+done > "$PANEL_FIFO" &
+
+#power button
+echo -e 'P\uf011' > $PANEL_FIFO &
+
+#sleep button
+echo -e 'E\uf186' > $PANEL_FIFO &
+
+#calcultor
+echo -e 'T\uf1ec' > $PANEL_FIFO &
+
+#screenlock
+echo -e 'K\uf023' > $PANEL_FIFO &
+
+. panel_colors
+
+cat "$PANEL_FIFO" | panel_bar | lemonbar -g x$PANEL_HEIGHT -f "$PANEL_FONT_FAMILY" -f "$ICON_FONT" -F "$COLOR_FOREGROUND" -B "$COLOR_BACKGROUND" -u 2 | bash &
+
+wait

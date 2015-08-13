@@ -1,0 +1,7 @@
+while true ; do
+echo "S$(date "+%b %d %Y %R")" > "$PANEL_FIFO" &
+sleep 0.5
+echo "B$(acpi -b| awk '{print $4}' | tr -d ',')" > "$PANEL_FIFO" &
+sleep 0.5
+echo "ololo"
+done
