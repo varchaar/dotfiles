@@ -1,6 +1,0 @@
-#!/bin/bash
-scrot /tmp/screen.png
-convert /tmp/screen.png -blur 0x30 -brightness-contrast -15x-5 /tmp/screen.png
-convert $HOME/Pictures/lock3.png -scale 70% $HOME/Pictures/lock.png
-[[ -f $HOME/Pictures/lock.png ]] && convert /tmp/screen.png $HOME/Pictures/lock.png -gravity center -composite -matte /tmp/screen.png
-i3lock -u -i /tmp/screen.png
