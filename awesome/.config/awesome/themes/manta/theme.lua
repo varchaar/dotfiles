@@ -27,7 +27,7 @@ local screen_width = awful.screen.focused().geometry.width
 local screen_height = awful.screen.focused().geometry.height
 
 theme.wallpaper = os.getenv("HOME") .. "/.config/awesome/themes/" .. theme_name .. "/wall.png"
-theme.font          = "Iosevka Nerd Font 12"
+theme.font          = "SF Pro Display"
 --theme.font          = "sans-serif 12"
 
 theme.xbackground = xrdb.background or	"#1E2541"

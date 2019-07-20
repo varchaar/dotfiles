@@ -19,3 +19,5 @@ prompt pure
 alias icat="kitty +kitten icat" 
 alias vim="nvim"
 eval $(keychain --eval --quiet id_ed25519 id_rsa)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
